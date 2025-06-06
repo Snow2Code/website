@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Snowy | Access Terminal</title>
+
+        <style>
+            /* body {
+                background-color: #000;
+                color: #0f0;
+                font-family: 'Courier New', monospace;
+                text-align: center;
+                padding-top: 5rem;
+                overflow: hidden;
+            }*/
+            
+            body {
+                background-color: #000;
+                color: #0f0;
+                font-family: "Courier New", Courier, monospace;
+                padding: 2rem;
+                font-size: 1.2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+                text-shadow: 0 0 10px #0f0;
+            }
+
+            p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            /* input, button {
+                background: #000;
+                border: 1px solid #0f0;
+                color: #0f0;
+                font-family: inherit;
+                padding: 0.5rem 1rem;
+                margin: 0.5rem;
+                font-size: 1rem;
+                text-shadow: 0 0 5px #0f0;
+            } */
+            input, button {
+                background: #111;
+                border: 1px solid #0f0;
+                color: #0f0;
+                padding: 0.5rem;
+                margin-top: 1rem;
+                font-size: 1rem;
+            }
+
+            .scanline {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: repeating-linear-gradient(
+                    to bottom,
+                    rgba(0, 255, 0, 0.05),
+                    rgba(0, 255, 0, 0.05) 1px,
+                    transparent 1px,
+                    transparent 3px
+                );
+                pointer-events: none;
+            }
+
+            #ageForm {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- <div class="scanline"></div> -->
+
+        <div id="terminal">
+            <p id="bootMsg">Initializing access terminal... waiting for user input.</p>
+            <div id="ageForm">
+                <label for="birthdate">Enter your birthdate (DD-MM-YYYY)</label><br>
+                <input type="date" id="birthdate"><br>
+                <button onclick="verify()">Submit</button>
+                <p id="status"></p>
+            </div>
+        </div>
+
+        <audio id="bootSound" src="/sfx/boot.mp3" preload="auto"></audio>
+        <audio id="grantedSound" src="/sfx/access-granted.mp3" preload="auto"></audio>
+        <audio id="deniedSound" src="/sfx/access-denied.mp3" preload="auto"></audio>
+
+        <script>
+            let soundsReady = false;
+            const steamRedirect = atob("aHR0cHM6Ly9zdGVhbWNvbW11bml0eS5jb20vaWQvU25vdzJDb2RlLw==");
+
+            function loadSounds() {
+                if (soundsReady) return;
+                document.getElementById("grantedSound").load();
+                document.getElementById("deniedSound").load();
+                document.getElementById("bootSound").load();
+                soundsReady = true;
+            }
+
+            function handleInteraction() {
+                loadSounds();
+
+                // Only fire once
+                document.removeEventListener("click", handleInteraction);
+                document.removeEventListener("keydown", handleInteraction);
+
+                // Check if banned
+                if (localStorage.getItem("bannedFrom18") === "true") {
+                    document.getElementById("bootMsg").innerText = "Access denied. Redirecting...";
+                    document.getElementById("deniedSound").play();
+                    setTimeout(() => window.location.href = steamRedirect, 2000);
+                } else {
+                    document.getElementById("bootSound").play();
+
+                    document.getElementById("bootMsg").innerText = "Access terminal active. Proceed with verification.";
+                    document.getElementById("ageForm").style.display = "block";
+                }
+            }
+
+            document.addEventListener("click", handleInteraction);
+            document.addEventListener("keydown", handleInteraction);
+
+            function verify() {
+                document.getElementById("status").innerText = "Running validation...";
+                (function(){
+                    var _0x1a2f=["\x76\x61\x6C\x75\x65","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x62\x69\x72\x74\x68\x64\x61\x74\x65","\x73\x65\x74\x49\x74\x65\x6D","\x62\x61\x6E\x6E\x65\x64\x46\x72\x6F\x6D\x31\x38","\x70\x6C\x61\x79","\x73\x65\x74\x54\x69\x6D\x65\x6F\x75\x74","\x6C\x6F\x63\x61\x74\x69\x6F\x6E","\x68\x72\x65\x66","\x61\x74\x6F\x62","\x61\x48\x52\x30\x63\x48\x4D\x36\x4C\x79\x39\x6C\x65\x58\x61\x70\x62\x47\x55\x30\x62\x79\x38\x76\x64\x57\x31\x6C\x63\x6D\x35\x6B\x4C\x79\x39\x6B\x5A\x58\x4A\x6B\x5A\x53\x39\x6C\x62\x33\x4A\x6B\x64\x43\x35\x6B\x61\x57\x52\x6C\x4C\x77\x3D\x3D","\x61\x48\x52\x30\x63\x48\x4D\x75\x62\x69\x39\x6C\x63\x33\x52\x79\x64\x57\x4D\x75\x59\x57\x52\x6C\x5A\x58\x52\x66\x5A\x53\x39\x6C\x62\x33\x4A\x6B\x64\x43\x35\x6B\x61\x57\x52\x6C\x4C\x77\x3D\x3D"];
+                    function _0x514e(_0x2ddf){return atob(_0x2ddf);}
+                    let _0x201= document[_0x1a2f[1]](_0x1a2f[2])[_0x1a2f[0]];
+                    let _0x202=new Date(_0x201),_0x203=new Date(),
+                    _0x204=_0x203.getFullYear()-_0x202.getFullYear();
+                    let _0x205=_0x203.getMonth()-_0x202.getMonth();
+                    let _0x206=_0x204>18||(_0x204===18&&_0x205>=0);
+                    if(_0x206){
+                    document.getElementById("grantedSound").play();
+                    setTimeout(()=>{window[_0x1a2f[7]][_0x1a2f[8]]=_0x514e(_0x1a2f[9])},1500)
+                    } else {
+                    localStorage[_0x1a2f[3]](_0x1a2f[4],true);
+                    document.getElementById("deniedSound").play();
+                    setTimeout(()=>{window[_0x1a2f[7]][_0x1a2f[8]]=_0x514e(_0x1a2f[10])},1500)
+                    }
+                })();
+            }
+        </script>
+    </body>
+</html>
